@@ -10,6 +10,7 @@ $baseFontSize: 25px !default;
 @import "mixin.scss"; // 以后@mixin，%，@function应该全部放在_mixin.scss文件中
 @import "function.scss";
 @import "extend.scss";
+@import "ifAndFor.scss";
 
 $baseBackground: #0982c1;
 $baseTextAlign: center;
@@ -186,6 +187,9 @@ $headings: (h1: 2em, h2: 1.5em, h3: 1.2em);
       margin-top: 10px;
       width: get_width(10,true,10px); // 调用pxToRem函数
     }
+  }
+  .ifAndFor {
+    @extend .fieldset;
   }
 }
 
