@@ -1,0 +1,113 @@
+$lte7: true !default;//是否兼容ie6,7
+// 是否支持某个浏览器的前缀，如果你不想支持，可以设置为false
+$prefix-for-webkit: true !default;
+$prefix-for-mozilla: true !default;
+$prefix-for-micorosoft: true !default;
+$prefix-for-opera: true !default;
+$prefix-for-spec: true !default; // 标准版
+/*混合(mixin)
+*sass中使用@mixin声明混合，可以传递参数，参数名以$符号开始，多个参数以逗号分开，也可以给参数设置默认值。
+*声明的@mixin通过@include来调用。
+*/
+// 无参mixin（建议传递参数的用@mixin，而非传递参数类的使用继承%）
+@mixin line {
+  border: solid 2px #9A9A9C;
+  margin: 10px auto
+}
+@mixin center-block {
+  margin-left:auto;
+  margin-right:auto;
+}
+@mixin inline-block { 
+  display: inline-block;
+   @if $lte7 { 
+     *display: inline;
+     *zoom:1; 
+   } 
+}
+// 有参mixin
+@mixin opacity($opacity:50) {
+  opacity: $opacity / 100;
+  filter: alpha(opacity=$opacity);
+}
+@mixin float($float:left) { 
+  float: $float; 
+  @if $lte7 { 
+    display: inline; 
+  } 
+}
+// 多个参数mixin
+@mixin horizontal-line($border:1px dashed #ccc, $padding:10px){
+  border-bottom:$border;
+  padding-top:$padding;
+  padding-bottom:$padding;  
+}
+// 多组值参数mixin
+@mixin box-shadow($shadow...) {
+  -webkit-box-shadow:$shadow;
+  box-shadow:$shadow;
+}
+
+// 按常规来说，我们所有的样式都是在@mixin里面定义好的，然后使用的时候@include就拷贝了这段样式，
+// 但是@content改变了这一惯例，它其实没有定义样式，它是定义好了选择器，然后@include的时候，就
+// 是选择器定了，你写的样式都放在这个选择器里面。
+@mixin header {
+  .header {
+    @content;
+  }
+}
+
+// 三角形
+@mixin triangle($direction, $size, $borderColor) {
+  margin-top: 10px;
+  display: inline-block;
+  @if $direction == top {
+    border-bottom: $size solid $borderColor;
+    border-left: $size dashed transparent; // 边框颜色为透明
+    border-right: $size dashed transparent;
+  }
+  @else if $direction == right {
+    border-left: $size solid $borderColor;
+    border-top: $size dashed transparent;
+    border-bottom: $size dashed transparent;
+  }
+  @else if $direction == bottom {
+    border-top: $size solid $borderColor;
+    border-left: $size dashed transparent;
+    border-right: $size dashed transparent;
+  }
+  @else if $direction == left {
+    border-right: $size solid $borderColor;
+    border-top: $size dashed transparent;
+    border-bottom: $size dashed transparent;
+  }
+}
+
+//webkit moz o 和标准
+@mixin transform($value...) {
+  @include prefixer(transform, $value, webkit moz o spec); 
+}
+
+// CSS3前缀
+@mixin prefixer($property, $value, $prefixes) {
+  @each $prefix in $prefixes {
+    @if $prefix == webkit and $prefix-for-webkit == true {
+      -webkit-#{$property}: $value
+    }
+    @else if $prefix == moz and $prefix-for-mozilla == true {
+      -moz-#{$property}: $value
+    }
+    @else if $prefix == ms and $prefix-for-micorosoft == true {
+      -ms-#{$property}: $value
+    }
+    @else if $prefix == o and $prefix-for-opera == true {
+      -o-#{$property}: $value
+    }
+    @else if $prefix == spec and $prefix-for-spec == true {
+      #{$property}: $value
+    }
+    @else {
+      @warn 'Unrecognized prefix: #{$prefix}'
+    }
+  }
+}
