@@ -1,0 +1,27 @@
+$baseFontSize: 20px !default;
+$gray: #858383 !default;
+$blue: #1310E6 !default;
+
+// 函数
+// 提醒刚开始sass的话，注意函数是返回一个值，不能直接放到sass里面直接去运行的，
+// 会报错。你可以把这些用在判断或者属性值里面.
+@function pxToRem($px) {
+  @return $px / $baseFontSize * 1rem;
+}
+
+$_columns: 12 !default; // 总列数
+$_column-width: 60px !default; // 单列宽度
+$_gutter: 20px !default; // 间隔   
+
+// 960网格布局
+@function get_width($columns: $_columns, $onlyInnerWith: true, $_subtract:0){
+  // 默认返回值
+  $return: ($_column-width + $_gutter) * $columns - $_subtract !default;
+
+  @if $onlyInnerWith == true {
+    // 如果$onlyInnerWith为true，那么减掉一个间隔$_gutter
+    $return: ($_column-width + $_gutter) * $columns - $_subtract - $_gutter;
+  }
+
+  @return $return;
+}

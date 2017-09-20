@@ -179,11 +179,12 @@ $headings: (h1: 2em, h2: 1.5em, h3: 1.2em);
   .function {
     @extend .fieldset;
     p {
-      font-size:pxToRem(25px);
+      font-size: pxToRem(25px); // 调用pxToRem函数
       background-color: lighten($blue,10%); // lighten减淡
       color:darken($gray,60%);  // darken加深
       border-radius: 10px;
       margin-top: 10px;
+      width: get_width(10,true,10px); // 调用pxToRem函数
     }
   }
 }
