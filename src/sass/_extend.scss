@@ -1,0 +1,27 @@
+$lte7: true;
+/* 占位选择器%
+*如果不调用则不会有任何多余的css文件，避免了以前在一些基础的文件中预定义了很多基础的样式，
+*然后实际应用中不管是否使用了@extend去继承相应的样式，都会解析出来所有的样式。
+*占位选择器以%标识定义，通过@extend调用。
+*/
+%h1 {
+  border: 4px solid #ff9aa9;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+%clearfix {
+  @if $lte7 {
+    *zoom: 1;// 属性是IE浏览器的专有属性，Firefox等其它浏览器不支持。它可以设置或检索对象的缩放比例。除此之外，它还有其他一些小作用，比如触发ie的hasLayout属性，清除浮动、清除margin的重叠等。
+  }
+  &:before,
+  &:after {
+    content: ''; // content 属性与 :before 及 :after 伪元素配合使用，来插入生成内容。
+    display: table; // 此元素会作为块级表格来显示（类似 <table>），表格前后带有换行符。
+    font: 0/0 a;// 前面一个零是字体大小．后面一个零是行高;font-family: a; font-size: 0px; line-height: 0;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
