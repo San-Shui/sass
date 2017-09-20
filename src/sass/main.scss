@@ -1,0 +1,190 @@
+// 在引入function.scss之前定义$baseFontSize
+$baseFontSize: 25px !default;
+/* 
+*@import的css文件跟普通CSS导入样式文件一样，导入的css文件不会合并到编译后的文件中，
+*而是以@import方式存在，生成style.min.css 
+*/
+@import "../css/style.css";
+// 将@import的scss文件合并进来只生成一个CSS文件main.min.css
+@import "style.scss";
+@import "mixin.scss"; // 以后@mixin，%，@function应该全部放在_mixin.scss文件中
+@import "function.scss";
+@import "extend.scss";
+
+$baseBackground: #0982c1;
+$baseTextAlign: center;
+
+// sass的默认变量仅需要在值后面加上!default
+$borderDirection: top !default; 
+$baseLineHeight: 1.5 !default;
+
+// 覆盖默认值
+$baseLineHeight: 3;
+
+//特殊变量:#{$variables} 应用于class和属性;
+.border-#{$borderDirection} {
+  border-#{$borderDirection}: 1px solid #ccc;
+}
+
+//特殊变量:#{$variables} 应用于复杂的属性值
+body {
+  font: #{$baseFontSize} / #{$baseLineHeight}
+}
+
+/* 多值变量  list
+*list数据可通过空格，逗号或小括号分隔多个值，可用nth($var,$index)取值。
+*关于list数据操作还有很多其他函数如length($list)，join($list1,$list2,[$separator])，append($list,$value,[$separator])等 
+*/
+$marginValue: 12px 15px 18px 20px 22px !default; //第一个值为默认值
+$display: block flex inline inline-block inline-flex !default;
+$justifyConten: flex-start flex-end center space-between space-around !default;
+
+/*多值变量 map
+map数据以key和value成对出现，其中value又可以是list。格式为：$map: (key1: value1, key2: value2, key3: value3);
+。可通过map-get($map,$key)取值。关于map数据还有很多其他函数如map-merge($map1,$map2)，
+map-keys($map)，map-values($map)等 
+*/
+$headings: (h1: 2em, h2: 1.5em, h3: 1.2em);
+
+@include header {
+  background: $baseBackground;
+  line-height: $baseLineHeight;
+  font-size: $baseFontSize;
+  display: nth($display, 2);
+  justify-content: nth($justifyConten, 3);
+  align-content: center;
+  .item {
+    margin-left: nth($marginValue, 5);
+  }
+  .text {
+    width: 200px;
+    line-height: 60px;
+    padding-top: 20px;
+  }
+}
+.container {
+  padding: 20px 0px;
+  background-color: #E2E2E2;
+  color: #595B66;
+  .title {
+    color: #E61C1C;
+    @each $header, $size in $headings {
+      #{$header} {
+        font-size: $size;
+        display: nth($display, 4);
+        margin-left: nth($marginValue, 5);
+        a {
+          margin-left: 10px;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+  .aImg {
+    display: nth($display, 2);
+    justify-content: nth($justifyConten, 3);
+    margin: 20px auto;
+    border: solid 2px #AAA1A1;
+    a{
+      display: nth($display, 1);
+      padding: 20px;
+      width: 260px;
+      height: 270px;
+      border-radius: 60px;
+      margin: 30px auto;
+      background-color: #AAA1A1;
+    }
+    .a1{
+      &:hover{ // &表示父元素选择器
+        background-color:#FC16CA;
+        box-shadow: 10px 10px 6px 5px #8495E9;
+        img {
+          @include transform(rotate(90deg));
+        }
+      }
+    }
+    .a2{
+      &:hover{ // &表示父元素选择器
+        background-color:#FC16CA;
+        box-shadow: 10px 10px 6px 5px #8495E9;
+        img {
+          @include transform(rotate(180deg));
+        }
+      }
+    }
+    .a3{
+      &:hover{ // &表示父元素选择器
+        background-color:#FC16CA;
+        box-shadow: 10px 10px 6px 5px #8495E9;
+        img {
+          @include transform(rotate(279deg));
+        }
+      }
+    }
+    .a4{
+      &:hover{ // &表示父元素选择器
+        background-color:#FC16CA;
+        box-shadow: 10px 10px 6px 5px #8495E9;
+        img {
+          @include transform(scale(1.2));
+        }
+      }
+    }
+  }
+  .fieldset {
+    margin: 0 100px 20px;
+    padding: 20px;
+    fieldset {
+      padding: 20px;
+      margin-bottom: 30px;
+      h1 {
+        font-size: map-get($headings, h1)
+      }
+      div {
+        @include line;
+      }
+      p {
+        @include opacity(80);
+        @include horizontal-line(1px solid #ccc);
+      }
+    }
+    border:1px solid #ccc;
+    @include box-shadow(0 2px 2px rgba(0,0,0,.3),0 3px 3px rgba(0,0,0,.3),0 4px 4px rgba(0,0,0,.3));
+  }
+  .mixin {
+    @extend .fieldset;
+    .triangle {
+      @include triangle(top, 15px, rgb(62, 15, 231))
+    }
+    .triangle1 {
+      @include triangle(right, 15px, rgb(15, 231, 98))
+    }
+    .triangle2 {
+      @include triangle(bottom, 15px, rgb(231, 181, 15))
+    }
+    .triangle3 {
+      @include triangle(left, 15px, rgb(231, 15, 105))
+    }
+  }
+  .extend {
+    @extend .fieldset; // 使用选择器的继承，要使用关键词@extend，后面紧跟需要继承的选择器。
+    margin-bottom: 30px;
+    .select {
+      @extend %h1;
+      margin: 20px auto;
+      padding: 10px;
+      @extend %clearfix;
+    } 
+  }
+  .function {
+    @extend .fieldset;
+    p {
+      font-size:pxToRem(25px);
+      background-color: lighten($blue,10%); // lighten减淡
+      color:darken($gray,60%);  // darken加深
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+  }
+}
+

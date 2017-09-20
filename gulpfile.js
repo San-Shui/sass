@@ -33,7 +33,7 @@ var clean = require('gulp-clean')
  * 使用gulp-sass文件编译成css
  */
 gulp.task('sassTask', function() {
-    gulp.src('src/sass/*.scss')
+    gulp.src('src/sass/main.scss')
         .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')})) // 错误提示
         .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(rename({ suffix: '.min' })) // 重命名
